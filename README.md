@@ -1,4 +1,4 @@
-# React + Vite + TypeScript Template (react-vite-ui)
+# React + Vite + TypeScript + shadcn/ui Template (react-vite-shadcn-ui-template)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Dan5py/react-vite-ui/blob/main/LICENSE)  
 **Inspired by**: [Dan5py's React Vite ShadCN UI Template](https://github.com/dan5py/react-vite-shadcn-ui.git)
@@ -17,6 +17,7 @@ A React + Vite template powered by shadcn/ui.
 - **PostCSS** - A tool for transforming CSS with JavaScript.
 - **Autoprefixer** - A PostCSS plugin to parse CSS and add vendor prefixes.
 - **shadcn/ui** - Beautifully designed components that you can copy and paste into your apps.
+- **react-router-dom** - A library for declarative routing, enabling seamless navigation and dynamic rendering in your React applications.
 
 ## ⚙️ Prerequisites
 
