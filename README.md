@@ -1,6 +1,8 @@
 # React + Vite + TypeScript Template (react-vite-ui)
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Dan5py/react-vite-ui/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Dan5py/react-vite-ui/blob/main/LICENSE)  
+**Inspired by**: [Dan5py's React Vite ShadCN UI Template](https://github.com/dan5py/react-vite-shadcn-ui.git)
+
 
 A React + Vite template powered by shadcn/ui.
 
