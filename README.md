@@ -32,13 +32,13 @@ Follow these steps to get started with the react-vite-ui template:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/
+   git clone https://github.com/DarinelGuillen/react-vite-shadcn-ui-template.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd react-vite-ui
+   cd react-vite-shadcn-ui-template
    ```
 
 3. Install the dependencies:
@@ -65,45 +65,39 @@ Follow these steps to get started with the react-vite-ui template:
 The project structure follows a standard React application layout:
 
 ```python
-react-vite-ui/
-  ├── node_modules/      # Project dependencies
-  ├── public/            # Public assets
-  ├── src/"
-   |   App.tsx
-   |   main.tsx
-   |   vite-env.d.ts
-   |
-   +---assets
-   |   +---images
-   |   |       react.svg
-   |   |
-   |   \---styles
-   |           globals.css
-   |
-   +---components
-   |   \---ui
-   |           badge.tsx
-   |           button.tsx
-   |           count-btn.tsx
-   |
-   +---container
-   |       Routes.tsx
-   |
-   +---lib
-   |       utils.ts
-   |
-   \---pages
-      +---Home
-      |       HomePage.tsx
-      |
-      \---Page2
-               Page2.tsx"
-  ├── eslint.config.js     # ESLint configuration
-  ├── index.html         # HTML entry point
-  ├── postcss.config.js  # PostCSS configuration
-  ├── tailwind.config.ts # Tailwind CSS configuration
-  ├── tsconfig.json      # TypeScript configuration
-  └── vite.config.ts     # Vite configuration
+react-vite-shadcn-ui-template/
+├── node_modules/         # Project dependencies
+├── public/               # Static assets (e.g., images, favicons)
+├── src/                  # Source code
+│   ├── App.tsx           # Main app component
+│   ├── main.tsx          # Entry point for React
+│   ├── vite-env.d.ts     # TypeScript Vite environment declarations
+│   ├── assets/           # Assets like images and styles
+│   │   ├── images/       # Image assets (e.g., logos, icons)
+│   │   │   └── react.svg # Example React logo
+│   │   └── styles/       # Global and reusable styles
+│   │       └── globals.css
+│   ├── components/       # Reusable UI components
+│   │   └── ui/           # UI-specific components
+│   │       ├── badge.tsx
+│   │       ├── button.tsx
+│   │       └── count-btn.tsx
+│   ├── container/        # Layout and route-specific containers
+│   │   └── Routes.tsx    # Handles app routing
+│   ├── lib/              # Utility functions and helpers
+│   │   └── utils.ts      # General-purpose utilities
+│   ├── pages/            # Application pages
+│   │   ├── Home/         # Home page components
+│   │   │   └── HomePage.tsx
+│   │   └── Page2/        # Page2 components
+│   │       └── Page2.tsx
+├── eslint.config.js      # ESLint configuration file
+├── index.html            # HTML entry point
+├── postcss.config.js     # PostCSS configuration
+├── tailwind.config.ts    # Tailwind CSS configuration
+├── tsconfig.json         # TypeScript configuration
+└── vite.config.ts        # Vite configuration
+
 ```
 
 ## 📄 License
