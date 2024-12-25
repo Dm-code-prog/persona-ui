@@ -54,10 +54,12 @@ Follow these steps to get started with the react-vite-ui template:
    pnpm dev
    ```
 
-   Test the production build locally
+5. Test the production build locally
+```bash
    pnpm build
-pnpm add serve -g
-serve dist
+   npx gh-pages -d dist #Desply in gp pages branch
+   serve dist #Local only
+   ```
 
 pnpm deploy
 
