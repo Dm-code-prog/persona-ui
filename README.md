@@ -54,6 +54,14 @@ Follow these steps to get started with the react-vite-ui template:
    pnpm dev
    ```
 
+   Test the production build locally
+   pnpm build
+pnpm add serve -g
+serve dist
+
+pnpm deploy
+
+
 ## 📜 Available Scripts
 
 - pnpm dev - Starts the development server.
