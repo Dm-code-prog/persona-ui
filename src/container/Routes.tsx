@@ -1,5 +1,3 @@
-
-
 import { Routes, Route } from "react-router-dom";
 import HomePage from "@/pages/Home/HomePage";
 import Page2 from "@/pages/Page2/Page2";
