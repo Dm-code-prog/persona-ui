@@ -11,7 +11,6 @@ import ErrorBoundary from "@/components/app/ErrorBoundary/ErrorBoundary.tsx";
 export const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            refetchInterval: 5000,
             refetchOnWindowFocus: true,
         }
     }

@@ -2,10 +2,10 @@ import {useEffect, useState} from 'react'
 import {AlertCircle} from 'lucide-react'
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog'
 
-import {usePingQuery} from '@/hooks/data/local/usePingQuery.ts'
+import {usePing} from '@/hooks/data/local/usePing.ts'
 
 export function LocalProgramStatusModal() {
-    const isAvailable = usePingQuery()
+    const isAvailable = usePing()
     const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
