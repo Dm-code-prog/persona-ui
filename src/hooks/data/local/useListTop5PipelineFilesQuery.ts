@@ -3,7 +3,16 @@ import {useQuery} from "@tanstack/react-query";
 import {AppConfig} from "@/config/app-config";
 
 // The OpenAPI spec shows an empty schema, so adjust as needed based on actual return data.
-export type ListTop5PipelineFilesResponse = Record<string, unknown>;
+export type ListTop5PipelineFilesResponse = {
+    input: {
+        videos: string[];
+        music: string[];
+        sound_effects: string[];
+        video_effects: string[];
+        photos: string[];
+    },
+    output: string[] | null;
+}
 
 export const useListTop5PipelineFilesQuery = (pipelineId: string) => {
     return useQuery({
@@ -19,6 +28,5 @@ export const useListTop5PipelineFilesQuery = (pipelineId: string) => {
             return (await response.json()) as ListTop5PipelineFilesResponse;
         },
         enabled: !!pipelineId,
-        retry: 0,
     });
 };

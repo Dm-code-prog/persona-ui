@@ -6,7 +6,7 @@ export function LayoutWithSidebar() {
         <div style={{display: "flex"}}>
             <AppSidebar/>
 
-            <div className="flex flex-1 p-4 sm:ml-64">
+            <div className="flex flex-1 px-4 py-12 sm:ml-64">
                 <Outlet/>
             </div>
         </div>
