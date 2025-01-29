@@ -1,6 +1,6 @@
 // getTop5PipelineQuery.ts
 import { useQuery } from "@tanstack/react-query";
-import { AppConfig } from "@/config/app-config";
+import { AppConfig } from "@/config/app-config.ts";
 
 export type GetTop5PipelineResponse = {
     id: string;

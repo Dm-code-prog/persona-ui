@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog'
 import {useNavigate} from "react-router-dom";
-import {useInitTop5PipelineMutation} from "@/hooks/data/local/useInitTop5PipelineMutation.ts";
+import {useInitTop5PipelineMutation} from "@/hooks/data/local/old/useInitTop5PipelineMutation.ts";
 import {useToast} from "@/hooks/use-toast.ts";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert.tsx";
 import {AlertCircle} from "lucide-react";

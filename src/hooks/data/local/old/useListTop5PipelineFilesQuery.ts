@@ -1,6 +1,6 @@
 // useListTop5PipelineFilesQuery.ts
 import {useQuery} from "@tanstack/react-query";
-import {AppConfig} from "@/config/app-config";
+import {AppConfig} from "@/config/app-config.ts";
 
 // The OpenAPI spec shows an empty schema, so adjust as needed based on actual return data.
 export type ListTop5PipelineFilesResponse = {

@@ -1,6 +1,6 @@
 // useGetSecretInsecureQuery.ts
 import { useQuery } from "@tanstack/react-query";
-import { AppConfig } from "@/config/app-config";
+import { AppConfig } from "@/config/app-config.ts";
 
 // The OpenAPI spec is empty for the response, adjust as needed.
 export type GetSecretInsecureResponse = Record<string, unknown>;

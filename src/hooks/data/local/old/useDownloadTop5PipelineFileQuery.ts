@@ -1,6 +1,6 @@
 // useDownloadTop5PipelineFileQuery.ts
 import { useQuery } from "@tanstack/react-query";
-import { AppConfig } from "@/config/app-config";
+import { AppConfig } from "@/config/app-config.ts";
 
 // The OpenAPI spec shows an empty schema for the response.
 // If it actually returns file data, you might need to handle Blob instead.

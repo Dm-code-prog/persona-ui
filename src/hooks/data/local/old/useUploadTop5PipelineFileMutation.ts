@@ -1,6 +1,6 @@
 // useUploadTop5PipelineFileMutation.ts
 import {useMutation} from "@tanstack/react-query";
-import {AppConfig} from "@/config/app-config";
+import {AppConfig} from "@/config/app-config.ts";
 import {queryClient} from "@/App.tsx";
 
 export type UploadTop5PipelineFileRequest = {

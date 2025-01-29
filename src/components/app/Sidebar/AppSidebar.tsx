@@ -1,18 +1,12 @@
 import {NavLink} from 'react-router-dom'
-import {Video, Wrench, Settings, Home} from 'lucide-react'
+import {Settings, Home, Youtube} from 'lucide-react'
 
 const routes = [
     {name: 'Home', path: '/', icon: Home},
     {
-        name: 'Pipelines',
-        items: [
-            {name: 'Top 5 pipeline', path: '/pipelines/top-5', icon: Video},
-        ]
-    },
-    {
         name: 'Tools',
         items: [
-            {name: 'Long to shorts', path: '/tools/long-to-shorts', icon: Wrench},
+            {name: 'AI Editor', path: '/tools/ai-editor', icon: Youtube},
         ]
     },
     {name: 'Secrets', path: '/secrets', icon: Settings},
@@ -23,7 +17,7 @@ export function AppSidebar() {
         <aside className="fixed w-64 h-screen border-r">
             <div className="h-[64px] flex items-center px-6">
                 <span className="text-xl font-semibold">
-                    <NavLink to={'/'} className="font-bold text-xl">Persona AI Studio</NavLink>
+                    <NavLink to={'/'} className="font-bold text-xl">Fabrika AI Studio</NavLink>
                 </span>
             </div>
             <nav className="px-4 py-4 h-full">

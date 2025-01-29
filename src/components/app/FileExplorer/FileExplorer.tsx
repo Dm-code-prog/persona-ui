@@ -7,10 +7,9 @@ import {Progress} from "@/components/ui/progress"
 import {Card, CardContent} from "@/components/ui/card"
 import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs"
 
-
-import {useUploadTop5PipelineFileMutation} from "@/hooks/data/local/old/useUploadTop5PipelineFileMutation.ts"
 import {useToast} from "@/hooks/use-toast.ts";
-import {useListTop5PipelineFilesQuery} from "@/hooks/data/local/old/useListTop5PipelineFilesQuery.ts";
+import {useUploadProjectFileMutation} from "@/hooks/data/local/projects/useUploadProjectFileMutation.ts";
+import {useListProjectFilesQuery} from "@/hooks/data/local/projects/useListProjectFilesQuery.ts";
 
 type FileNode = {
     name: string
@@ -62,10 +61,13 @@ const FileTree = ({node, level = 0}: { node: FileNode; level?: number }) => {
     )
 }
 
-const FileUploader = ({pipelineId}: { pipelineId: string }) => {
+const FileUploader = (
+    {project_id,}:
+    { project_id: string }
+) => {
     const [uploadProgress, setUploadProgress] = useState(0)
     const {toast} = useToast()
-    const uploadMutation = useUploadTop5PipelineFileMutation(pipelineId!)
+    const uploadMutation = useUploadProjectFileMutation(project_id)
 
     const [fileType, setFileType] = useState("video");
 
@@ -76,9 +78,9 @@ const FileUploader = ({pipelineId}: { pipelineId: string }) => {
         try {
             await uploadMutation.mutateAsync(
                 {
-                    file,
                     file_type: fileType,
-                },
+                    file: file,
+                }
             )
 
             toast({
@@ -165,8 +167,8 @@ function parseNestedObjectToFileNode(obj: any, nodeName: string): FileNode {
     return node
 }
 
-export default function Top5FileExplorerUploader({pipelineId}: { pipelineId: string }) {
-    const {data: filesData, isLoading, isError} = useListTop5PipelineFilesQuery(pipelineId)
+export default function FileExplorer({project_id}: { project_id: string }) {
+    const {data: filesData, isLoading, isError} = useListProjectFilesQuery(project_id)
     const fileTree = filesData
         ? parseNestedObjectToFileNode(filesData, "root")
         : null
@@ -189,7 +191,7 @@ export default function Top5FileExplorerUploader({pipelineId}: { pipelineId: str
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold mb-4">File Uploader</h3>
-                        <FileUploader pipelineId={pipelineId}/>
+                        <FileUploader project_id={project_id}/>
                     </div>
                 </div>
             </CardContent>

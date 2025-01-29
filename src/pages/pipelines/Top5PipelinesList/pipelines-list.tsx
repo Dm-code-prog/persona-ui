@@ -4,7 +4,7 @@ import {formatDistanceToNow} from 'date-fns'
 import {Link} from "react-router-dom";
 import {ErrorUI} from "@/components/app/Error/Error.tsx";
 import Loader from "@/components/app/Loader/Loader.tsx";
-import {useListTop5PipelinesQuery} from "@/hooks/data/local/useListTop5PipelinesQuery.ts";
+import {useListTop5PipelinesQuery} from "@/hooks/data/local/old/useListTop5PipelinesQuery.ts";
 
 export function PipelinesList() {
     const {data, error, isPending} = useListTop5PipelinesQuery()

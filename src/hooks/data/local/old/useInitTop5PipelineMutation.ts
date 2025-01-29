@@ -1,6 +1,6 @@
 // useInitTop5PipelineMutation.ts
 import { useMutation } from "@tanstack/react-query";
-import { AppConfig } from "@/config/app-config";
+import { AppConfig } from "@/config/app-config.ts";
 
 export type InitTop5PipelineRequest = {
     name: string;

@@ -3,7 +3,7 @@ import {useState} from "react";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
 
-import {useGetTop5PipelineQuery} from "@/hooks/data/local/useGetTop5PipelineQuery.ts";
+import {useGetTop5PipelineQuery} from "@/hooks/data/local/old/useGetTop5PipelineQuery.ts";
 import {useParams} from "react-router-dom";
 import {motion} from "framer-motion";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
@@ -21,7 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import {useListTop5PipelineFilesQuery} from "@/hooks/data/local/useListTop5PipelineFilesQuery";
+import {useListTop5PipelineFilesQuery} from "@/hooks/data/local/old/useListTop5PipelineFilesQuery.ts";
 
 
 // Zod schema for form validation
