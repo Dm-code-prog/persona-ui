@@ -25,5 +25,6 @@ export const useGetProjectTasksQuery = (project_id: string) => {
             return (await response.json()) as GetProjectTasksResponse;
         },
         enabled: Boolean(project_id),
+        refetchInterval: 5000,
     });
 };

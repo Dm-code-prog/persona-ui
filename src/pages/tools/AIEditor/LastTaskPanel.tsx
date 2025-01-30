@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react"
 import {motion} from "framer-motion"
 import {formatDistanceToNow} from "date-fns"
-import {AlertCircle, Check, CheckCircle,} from "lucide-react"
+import {AlertCircle, Check} from "lucide-react"
 import {
     type GetProjectTasksResponseItem,
     useGetProjectTasksQuery

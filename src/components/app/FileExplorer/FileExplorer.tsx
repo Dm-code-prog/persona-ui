@@ -10,25 +10,37 @@ import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {useToast} from "@/hooks/use-toast.ts";
 import {useUploadProjectFileMutation} from "@/hooks/data/local/projects/useUploadProjectFileMutation.ts";
 import {useListProjectFilesQuery} from "@/hooks/data/local/projects/useListProjectFilesQuery.ts";
+import {FilePreviewModal} from "@/components/app/FileExplorer/FilePreview.tsx";
 
 type FileNode = {
     name: string
     type: "file" | "folder"
+    path: string
     children?: FileNode[]
 }
 
 const FileIcon = ({type, name}: { type: string; name: string }) => {
     if (type === "folder") return <Folder className="text-purple-500"/>
-    if (name.endsWith(".mp4")) return <FaFileVideo className="text-blue-500"/>
+    if (name.endsWith(".mp4")) return <FaFileVideo className="text-purple-500"/>
     if (name.endsWith(".jpg") || name.endsWith(".png")) return <FaFileImage className="text-green-500"/>
     if (name.endsWith(".mp3") || name.endsWith(".wav")) return <FaFileAudio className="text-purple-500"/>
     if (name.includes("effect")) return <FaFileCode className="text-red-500"/>
     return <FaFile className="text-gray-500"/>
 }
 
-const FileTree = ({node, level = 0}: { node: FileNode; level?: number }) => {
+const FileTree = ({node, project_id, level = 0}: { node: FileNode; project_id: string; level?: number }) => {
     const [isOpen, setIsOpen] = useState(true)
     const toggleOpen = () => setIsOpen(!isOpen)
+
+    const [previewIsOpen, setPreviewIsOpen] = useState(false)
+
+    const onClick = () => {
+        toggleOpen()
+
+        if (!node.children) {
+            setPreviewIsOpen(true)
+        }
+    }
 
     return (
         <motion.div
@@ -38,7 +50,7 @@ const FileTree = ({node, level = 0}: { node: FileNode; level?: number }) => {
         >
             <div
                 className={`flex items-center space-x-2 p-2 rounded-lg hover:bg-accent cursor-pointer`}
-                onClick={toggleOpen}
+                onClick={onClick}
             >
                 <FileIcon type={node.type} name={node.name}/>
                 <span>{node.name}</span>
@@ -52,11 +64,20 @@ const FileTree = ({node, level = 0}: { node: FileNode; level?: number }) => {
                         className="ml-4"
                     >
                         {node.children.map((child, index) => (
-                            <FileTree key={index} node={child} level={level + 1}/>
+                            <FileTree project_id={project_id} key={index} node={child} level={level + 1}/>
                         ))}
                     </motion.div>
                 )}
             </AnimatePresence>
+            {
+                previewIsOpen && (
+                    <FilePreviewModal
+                        project_id={project_id}
+                        file_path={node.path}
+                        onClose={() => setPreviewIsOpen(false)}
+                    />
+                )
+            }
         </motion.div>
     )
 }
@@ -133,38 +154,49 @@ const FileUploader = (
     )
 }
 
-// @eslint-ignore
-function parseNestedObjectToFileNode(obj: any, nodeName: string): FileNode {
+function parseNestedObjectToFileNode(
+// @eslint-ignore-next-line
+obj: any,
+nodeName: string,
+parentPath = ""
+): FileNode {
+    // Build the path by appending the current node to the parent's path
+    const nodePath = parentPath ? `${parentPath}/${nodeName}` : nodeName;
+
     // Always treat this level as a folder (unless you have some special leaf logic)
     const node: FileNode = {
         name: nodeName,
         type: "folder",
+        // remove root from the start
+        path: nodePath.replace(/^root\//, ""),
         children: [],
-    }
+    };
 
-    // If "obj" is null, we’ll just return an empty folder
+    // If "obj" is null, we'll just return an empty folder
     if (obj === null) {
-        return node
+        return node;
     }
 
-    // If it’s an array, treat each element as a file
+    // If it's an array, treat each element as a file
     if (Array.isArray(obj)) {
-        node.children = obj.map<FileNode>((item: string, index: number) => ({
-            name: item ?? `file-${index}`,
+        node.children = obj.map<FileNode>((item: string) => ({
+            name: item,
             type: "file",
-        }))
-        return node
+            // Build path for each item in array
+            path: `${nodePath}/${item}`.replace(/^root\//, ""),
+        }));
+        return node;
     }
 
-    // If it’s an object, recurse for each key
+    // If it's an object, recurse for each key
     if (typeof obj === "object") {
         Object.entries(obj).forEach(([key, value]) => {
-            const childNode = parseNestedObjectToFileNode(value, key)
-            node.children?.push(childNode)
-        })
+            const childNode = parseNestedObjectToFileNode(value, key, nodePath);
+            node.children?.push(childNode);
+        });
     }
 
-    return node
+    return node;
 }
 
 export default function FileExplorer({project_id}: { project_id: string }) {
@@ -184,7 +216,7 @@ export default function FileExplorer({project_id}: { project_id: string }) {
                         {fileTree && fileTree.children && (
                             <div className="border rounded-lg p-4 max-h-[400px] overflow-y-auto">
                                 {fileTree.children.map((node, index) => (
-                                    <FileTree key={index} node={node}/>
+                                    <FileTree project_id={project_id} key={index} node={node}/>
                                 ))}
                             </div>
                         )}
@@ -198,4 +230,3 @@ export default function FileExplorer({project_id}: { project_id: string }) {
         </Card>
     )
 }
-
