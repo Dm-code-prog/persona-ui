@@ -39,7 +39,6 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
             pause_threshold: 0.5,
             pause_padding: 0.1,
             whisper_model: "small",
-            video_name: "",
         },
     })
 
