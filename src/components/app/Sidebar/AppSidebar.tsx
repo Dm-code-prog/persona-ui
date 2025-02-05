@@ -1,5 +1,5 @@
 import {NavLink} from 'react-router-dom'
-import {Settings, Home, Youtube} from 'lucide-react'
+import {Settings, Home, Youtube, ChartLine} from 'lucide-react'
 
 const routes = [
     {name: 'Home', path: '/', icon: Home},
@@ -7,6 +7,7 @@ const routes = [
         name: 'Tools',
         items: [
             {name: 'AI Editor', path: '/tools/ai-editor', icon: Youtube},
+            {name: 'YouTube Tracker', path: '/analytics/youtube-channels', icon: ChartLine},
         ]
     },
     {name: 'Secrets', path: '/secrets', icon: Settings},
