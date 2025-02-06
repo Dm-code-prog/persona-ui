@@ -12,6 +12,8 @@ interface YouTubeAnalytics {
     subscribersGained: number
     likes: number
     dislikes: number
+    averageViewDuration: number
+    averageViewPercentage: number
 }
 
 type AnalyticsChartProps = {
@@ -46,6 +48,10 @@ export default function YouTubeAnalyticsDashboard({ data }: AnalyticsChartProps)
     const subscribersData = useMemo(() => formatData(data, "subscribersGained"), [data])
     const likesData = useMemo(() => formatData(data, "likes"), [data])
     const dislikesData = useMemo(() => formatData(data, "dislikes"), [])
+    const averageViewDurationData = useMemo(() => formatData(data, "averageViewDuration"), [])
+    const averageViewPercentageData = useMemo(() => formatData(data, "averageViewPercentage"), [])
+
+    console.log(data)
 
 
     return (
@@ -57,14 +63,14 @@ export default function YouTubeAnalyticsDashboard({ data }: AnalyticsChartProps)
                             <AreaChart data={viewsData}>
                                 <XAxis dataKey="day" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
                                 <YAxis
-            
                                     fontSize={12}
                                     tickLine={false}
                                     axisLine={false}
+                                    dataKey="value"
                                     tickFormatter={(value) => `${value.toLocaleString()}`}
                                 />
                                 <ChartTooltip content={<ChartTooltipContent />} />
-                                <Line type="monotone" dataKey="value" strokeWidth={2} dot={false} />
+                                <Area type="monotone" dataKey="value" strokeWidth={2} dot={false} fillOpacity={0.2} fill="hsl(var(--chart-1))" />
                             </AreaChart>
                         </ResponsiveContainer>
                     </ChartContainer>
@@ -72,7 +78,7 @@ export default function YouTubeAnalyticsDashboard({ data }: AnalyticsChartProps)
 
                 <ChartCard title="Watch Time" description="Estimated minutes watched">
                     <ChartContainer
-                        config={{ watchTime: { label: "Minutes", color: "hsl(var(--chart-2))" } }}
+                        config={{ watchTime: { label: "Minutes", color: "hsl(var(--chart-3))" } }}
                         className="h-[300px]"
                     >
                         <ResponsiveContainer width="100%" height="100%">
@@ -88,8 +94,11 @@ export default function YouTubeAnalyticsDashboard({ data }: AnalyticsChartProps)
                                 <Area
                                     type="monotone"
                                     dataKey="value"
-                            
+                                    strokeWidth={2}
+                                    dot={false}
                                     fillOpacity={0.2}
+                                    fill="hsl(var(--chart-1))"
+                                    stroke="hsl(var(--chart-1))"
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -116,18 +125,17 @@ export default function YouTubeAnalyticsDashboard({ data }: AnalyticsChartProps)
                                     tickMargin={10}
                                     axisLine={false}
                                 />
+                                <YAxis
+                                    fontSize={12}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickFormatter={(value) => `${value.toLocaleString()}`}
+                                />
                                 <ChartTooltip
                                     cursor={false}
                                     content={<ChartTooltipContent hideLabel />}
                                 />
-                                <Bar dataKey="value" radius={8}>
-                                    <LabelList
-                                        position="top"
-                                        offset={12}
-                                        className="fill-foreground"
-                                        fontSize={12}
-                                    />
-                                </Bar>
+                                <Bar dataKey="value" radius={8} fill="hsl(var(--chart-1))" />
                             </BarChart>
                         </ResponsiveContainer>
                     </ChartContainer>
@@ -152,16 +160,49 @@ export default function YouTubeAnalyticsDashboard({ data }: AnalyticsChartProps)
                                     dataKey="value"
                                     strokeWidth={2}
                                     dot={false}
+                                    stroke="hsl(var(--chart-2))"
                                 />
                                 <Line
                                     type="monotone"
                                     data={dislikesData}
-                                    stroke="orange"
+                                    stroke="hsl(var(--chart-5))"
                                     dataKey="value"
                                     strokeWidth={2}
                                     dot={false}
                                 />
                             </LineChart>
+                        </ResponsiveContainer>
+                    </ChartContainer>
+                </ChartCard>
+
+                <ChartCard title="Average View Duration" description="Average view duration">
+                    <ChartContainer
+                        config={{ averageViewDuration: { label: "Duration", color: "hsl(var(--chart-6))" } }}
+                        className="h-[300px]"
+                    >
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={averageViewDurationData}>
+                                <XAxis dataKey="day" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                                <YAxis fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value.toLocaleString()} sec.`} />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Area type="monotone" dataKey="value" strokeWidth={2} dot={false} fillOpacity={0.2} fill="hsl(var(--chart-6))" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </ChartContainer>
+                </ChartCard>
+
+                <ChartCard title="Average View Percentage" description="Average view percentage">
+                    <ChartContainer
+                        config={{ averageViewPercentage: { label: "Percentage", color: "hsl(var(--chart-2))" } }}
+                        className="h-[300px]"
+                    >
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={averageViewPercentageData}>
+                                <XAxis dataKey="day" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                                <YAxis fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value.toLocaleString()}%`} />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Area type="monotone" dataKey="value" strokeWidth={2} dot={false} fillOpacity={0.2} fill="hsl(var(--chart-4))" stroke="hsl(var(--chart-4))" />
+                            </AreaChart>
                         </ResponsiveContainer>
                     </ChartContainer>
                 </ChartCard>

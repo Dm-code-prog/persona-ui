@@ -1,16 +1,17 @@
-import {useState} from "react"
-import {motion, AnimatePresence} from "framer-motion"
-import {useDropzone} from "react-dropzone"
-import {FaFile, FaFileVideo, FaFileImage, FaFileAudio, FaFileCode} from "react-icons/fa"
-import {Folder} from 'lucide-react'
-import {Progress} from "@/components/ui/progress"
-import {Card, CardContent} from "@/components/ui/card"
-import {Tabs, TabsList, TabsTrigger} from "@/components/ui/tabs"
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { useDropzone } from "react-dropzone"
+import { FaFile, FaFileVideo, FaFileImage, FaFileAudio, FaFileCode } from "react-icons/fa"
+import { Folder, Trash2 } from 'lucide-react'
+import { Progress } from "@/components/ui/progress"
+import { Card, CardContent } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import {useToast} from "@/hooks/use-toast.ts";
-import {useUploadProjectFileMutation} from "@/hooks/data/local/projects/useUploadProjectFileMutation.ts";
-import {useListProjectFilesQuery} from "@/hooks/data/local/projects/useListProjectFilesQuery.ts";
-import {FilePreviewModal} from "@/components/app/FileExplorer/FilePreview.tsx";
+import { toast, useToast } from "@/hooks/use-toast.ts";
+import { useUploadProjectFileMutation } from "@/hooks/data/local/projects/useUploadProjectFileMutation.ts";
+import { useListProjectFilesQuery } from "@/hooks/data/local/projects/useListProjectFilesQuery.ts";
+import { FilePreviewModal } from "@/components/app/FileExplorer/FilePreview.tsx";
+import { useDeleteProjectFileMutation } from "@/hooks/data/local/projects/useDeleteProjectFileMutation"
 
 type FileNode = {
     name: string
@@ -19,16 +20,16 @@ type FileNode = {
     children?: FileNode[]
 }
 
-const FileIcon = ({type, name}: { type: string; name: string }) => {
-    if (type === "folder") return <Folder className="text-purple-500"/>
-    if (name.endsWith(".mp4")) return <FaFileVideo className="text-purple-500"/>
-    if (name.endsWith(".jpg") || name.endsWith(".png")) return <FaFileImage className="text-green-500"/>
-    if (name.endsWith(".mp3") || name.endsWith(".wav")) return <FaFileAudio className="text-purple-500"/>
-    if (name.includes("effect")) return <FaFileCode className="text-red-500"/>
-    return <FaFile className="text-gray-500"/>
+const FileIcon = ({ type, name }: { type: string; name: string }) => {
+    if (type === "folder") return <Folder className="text-purple-500" />
+    if (name.endsWith(".mp4")) return <FaFileVideo className="text-purple-500" />
+    if (name.endsWith(".jpg") || name.endsWith(".png")) return <FaFileImage className="text-green-500" />
+    if (name.endsWith(".mp3") || name.endsWith(".wav")) return <FaFileAudio className="text-purple-500" />
+    if (name.includes("effect")) return <FaFileCode className="text-red-500" />
+    return <FaFile className="text-gray-500" />
 }
 
-const FileTree = ({node, project_id, level = 0}: { node: FileNode; project_id: string; level?: number }) => {
+const FileTree = ({ node, project_id, level = 0 }: { node: FileNode; project_id: string; level?: number }) => {
     const [isOpen, setIsOpen] = useState(true)
     const toggleOpen = () => setIsOpen(!isOpen)
 
@@ -42,29 +43,49 @@ const FileTree = ({node, project_id, level = 0}: { node: FileNode; project_id: s
         }
     }
 
+    const deleteMutation = useDeleteProjectFileMutation(project_id)
+
+    const onDelete = async (e: React.MouseEvent<SVGSVGElement>) => {
+        e.stopPropagation()
+
+        if (node.children) return
+
+        try {
+            await deleteMutation.mutateAsync({ file_path: node.path, })
+        } catch (error) {
+            toast({
+                title: "Error deleting file",
+                description: `There was an error deleting your file: ${error}. Please try again.`,
+            })
+        }
+    }
+
     return (
         <motion.div
-            initial={{opacity: 0, y: -10}}
-            animate={{opacity: 1, y: 0}}
-            transition={{duration: 0.3, delay: level * 0.1}}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: level * 0.1 }}
         >
             <div
-                className={`flex items-center space-x-2 p-2 rounded-lg hover:bg-accent cursor-pointer`}
+                className={`flex w-full items-center justify-between space-x-2 p-2 rounded-lg hover:bg-accent cursor-pointer`}
                 onClick={onClick}
             >
-                <FileIcon type={node.type} name={node.name}/>
-                <span>{node.name}</span>
+                <div className="flex items-center space-x-2">
+                    <FileIcon type={node.type} name={node.name} />
+                    <span>{node.name}</span>
+                </div>
+                {!node.children && <Trash2 className="text-destructive" width={16} height={16} onClick={onDelete} />}
             </div>
             <AnimatePresence>
                 {isOpen && node.children && (
                     <motion.div
-                        initial={{opacity: 0, height: 0}}
-                        animate={{opacity: 1, height: "auto"}}
-                        exit={{opacity: 0, height: 0}}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
                         className="ml-4"
                     >
                         {node.children.map((child, index) => (
-                            <FileTree project_id={project_id} key={index} node={child} level={level + 1}/>
+                            <FileTree project_id={project_id} key={index} node={child} level={level + 1} />
                         ))}
                     </motion.div>
                 )}
@@ -83,11 +104,11 @@ const FileTree = ({node, project_id, level = 0}: { node: FileNode; project_id: s
 }
 
 const FileUploader = (
-    {project_id,}:
-    { project_id: string }
+    { project_id, }:
+        { project_id: string }
 ) => {
     const [uploadProgress, setUploadProgress] = useState(0)
-    const {toast} = useToast()
+    const { toast } = useToast()
     const uploadMutation = useUploadProjectFileMutation(project_id)
 
     const [fileType, setFileType] = useState("video");
@@ -119,7 +140,7 @@ const FileUploader = (
         }
     }
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
     return (
         <div>
@@ -134,9 +155,8 @@ const FileUploader = (
 
             <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors duration-300 ${
-                    isDragActive ? "border-primary bg-primary/10" : "border-gray-300 hover:border-primary"
-                }`}
+                className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors duration-300 ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300 hover:border-primary"
+                    }`}
             >
                 <input {...getInputProps()} />
                 <p className="text-lg font-medium mb-2">
@@ -146,7 +166,7 @@ const FileUploader = (
             </div>
             {uploadProgress > 0 && (
                 <div className="mt-4">
-                    <Progress value={uploadProgress} className="w-full"/>
+                    <Progress value={uploadProgress} className="w-full" />
                     <p className="text-sm text-gray-500 mt-2">Uploading: {uploadProgress}%</p>
                 </div>
             )}
@@ -155,10 +175,10 @@ const FileUploader = (
 }
 
 function parseNestedObjectToFileNode(
-// @eslint-ignore-next-line
-obj: any,
-nodeName: string,
-parentPath = ""
+    // @eslint-ignore-next-line
+    obj: any,
+    nodeName: string,
+    parentPath = ""
 ): FileNode {
     // Build the path by appending the current node to the parent's path
     const nodePath = parentPath ? `${parentPath}/${nodeName}` : nodeName;
@@ -199,8 +219,8 @@ parentPath = ""
     return node;
 }
 
-export default function FileExplorer({project_id}: { project_id: string }) {
-    const {data: filesData, isLoading, isError} = useListProjectFilesQuery(project_id)
+export default function FileExplorer({ project_id }: { project_id: string }) {
+    const { data: filesData, isLoading, isError } = useListProjectFilesQuery(project_id)
     const fileTree = filesData
         ? parseNestedObjectToFileNode(filesData, "root")
         : null
@@ -216,14 +236,14 @@ export default function FileExplorer({project_id}: { project_id: string }) {
                         {fileTree && fileTree.children && (
                             <div className="border rounded-lg p-4 max-h-[400px] overflow-y-auto">
                                 {fileTree.children.map((node, index) => (
-                                    <FileTree project_id={project_id} key={index} node={node}/>
+                                    <FileTree project_id={project_id} key={index} node={node} />
                                 ))}
                             </div>
                         )}
                     </div>
                     <div>
                         <h3 className="text-xl font-semibold mb-4">File Uploader</h3>
-                        <FileUploader project_id={project_id}/>
+                        <FileUploader project_id={project_id} />
                     </div>
                 </div>
             </CardContent>

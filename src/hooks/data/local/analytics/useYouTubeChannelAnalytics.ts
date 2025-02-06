@@ -9,6 +9,8 @@ interface YouTubeAnalytics {
     subscribersGained: number;
     likes: number;
     dislikes: number;
+    averageViewDuration: number;
+    averageViewPercentage: number;
 }
 
 function parseYouTubeAnalytics(response: any): YouTubeAnalytics[] {
@@ -89,10 +91,17 @@ export function useYouTubeAnalytics(channelId: string, startDate?: string, endDa
         url.searchParams.set("startDate", startDate)
         url.searchParams.set("endDate", endDate)
         url.searchParams.set("dimensions", "day")
-        url.searchParams.set("metrics", "views,estimatedMinutesWatched,subscribersGained,likes,dislikes")
+        url.searchParams.set("metrics", "views,estimatedMinutesWatched,subscribersGained,likes,dislikes,averageViewDuration,averageViewPercentage")
         url.searchParams.set("access_token", accessToken)
 
         const response = await fetch(url.toString())
+
+        if (response.status === 401) {
+            setIsAuthorized(false)
+            localStorage.removeItem(`youtube_access_token_${channelId}`)
+            throw new Error("Unauthorized")
+        }
+
         if (!response.ok) {
             throw new Error("Failed to fetch analytics data")
         }

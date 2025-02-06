@@ -1,17 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config";
+import { queryClient } from "@/App";
 
 export type DeleteProjectFileRequest = {
-    project_id: string;
     file_path: string;
 };
 
 export type DeleteProjectFileResponse = Record<string, unknown>;
 // Schema is empty per the spec.
 
-export const useDeleteProjectFileMutation = () => {
+export const useDeleteProjectFileMutation = (project_id: string) => {
     return useMutation<DeleteProjectFileResponse, Error, DeleteProjectFileRequest>({
-        mutationFn: async ({ project_id, file_path }) => {
+        mutationFn: async ({ file_path }) => {
             const qs = new URLSearchParams({ file_path });
             const url = `${AppConfig.backend_url}/api/projects/${project_id}/files/delete?${qs.toString()}`;
 
@@ -22,6 +22,9 @@ export const useDeleteProjectFileMutation = () => {
                 throw new Error("Failed to delete project file");
             }
             return (await response.json()) as DeleteProjectFileResponse;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["ListProjectFiles", project_id] });
         },
     });
 };

@@ -54,11 +54,11 @@ export function TopBar() {
             <div className="flex w-full items-center justify-between space-x-4">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="bg-secondary  border-2 border-accent">
+                        <Button variant="outline" className="bg-background  border-2 border-accent">
                             {selectedProject || "Select Project"} <ChevronDown className="ml-2 h-4 w-4"/>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-secondary border-gray-700">
+                    <DropdownMenuContent className="w-56 bg-background border-gray-700">
                         {data.map((project) => (
                             <DropdownMenuItem
                                 key={project.id}
@@ -66,7 +66,7 @@ export function TopBar() {
                                     setSelectedProject(project.name)
                                     navigate(`/tools/ai-editor/${project.id}`)
                                 }}
-                                className="text-gray-300 focus:bg-gray-700 focus:text-white"
+                                className="focus:bg-gray-700 focus:text-white"
                             >
                                 {project.name}
                             </DropdownMenuItem>

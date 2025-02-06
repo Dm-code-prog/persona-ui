@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { useYouTubeAnalytics } from "@/hooks/data/local/analytics/useYouTubeChannelAnalytics"
 import YouTubeAnalyticsChart from "./AnalyticsChart"
+import Loader from "@/components/app/Loader/Loader"
+import { ErrorUI } from "@/components/app/Error/Error"
 
 type StatisticsProps = {
     channels: { channel_id: string, channel_name: string }[]
@@ -23,6 +25,15 @@ export const Statistics = ({ channels, dateRange }: StatisticsProps) => {
             </div>
         )
     }
+
+    if (r.isLoadingAnalytics) {
+        return <Loader />
+    }
+
+    if (r.analyticsError) {
+        return <ErrorUI error={r.analyticsError} />
+    }
+    
 
     return (
         <div>

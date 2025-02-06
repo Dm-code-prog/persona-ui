@@ -1,12 +1,14 @@
 import { useState } from "react"
-import { Scissors } from "lucide-react"
+import { Scissors, Wand2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { PauseCutterForm } from "./PauseCutterTool.tsx"
+import { UnifierToolForm } from "./UnifierTool.tsx"
 
 export function Toolbar() {
     const [isPauseCutterOpen, setIsPauseCutterOpen] = useState(false)
+    const [isUnifierOpen, setIsUnifierOpen] = useState(false)
 
     return (
         <TooltipProvider>
@@ -27,6 +29,16 @@ export function Toolbar() {
                             <p>Pause Cutter</p>
                         </TooltipContent>
                     </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button variant="ghost" size="icon" onClick={() => setIsUnifierOpen(true)}>
+                                <Wand2 className="h-6 w-6" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="left" className="bg-secondary text-white">
+                            <p>Unifier</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             </div>
 
@@ -36,6 +48,14 @@ export function Toolbar() {
                         <DialogTitle>Cut pauses</DialogTitle>
                     </DialogHeader>
                     <PauseCutterForm onClose={() => setIsPauseCutterOpen(false)} />
+                </DialogContent>
+            </Dialog>
+            <Dialog open={isUnifierOpen} onOpenChange={setIsUnifierOpen}>
+                <DialogContent className="bg-background text-white border-accent">
+                    <DialogHeader>
+                        <DialogTitle>Unifier</DialogTitle>
+                    </DialogHeader>
+                    <UnifierToolForm onClose={() => setIsUnifierOpen(false)} />
                 </DialogContent>
             </Dialog>
         </TooltipProvider>
