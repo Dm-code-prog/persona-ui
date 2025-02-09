@@ -17,6 +17,7 @@ const formSchema = z.object({
     pause_padding: z.number().min(0.05).max(10).optional().default(0.1),
     whisper_model: z.string().optional().default("small"),
     video_name: z.string(),
+    output_name: z.string().optional().default("pause-cutter-output.mp4"),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -39,6 +40,7 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
             pause_threshold: 0.5,
             pause_padding: 0.1,
             whisper_model: "small",
+            output_name: "pause-cutter-output.mp4",
         },
     })
 
@@ -52,6 +54,7 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                         title: "Pause Cutter Tool",
                         description: "The tool started processing the video",
                     })
+                    onClose()
                 },
                 onError: (error) => {
                     toast({
@@ -61,7 +64,6 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                 }
             }
         )
-        onClose()
     }
 
     if (error) {
@@ -83,11 +85,11 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                             <FormLabel>Select File</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                    <SelectTrigger className="bg-secondary  text-white">
+                                    <SelectTrigger className=" text-white">
                                         <SelectValue placeholder="Select a file"/>
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-secondary border-gray-600 text-white">
+                                <SelectContent className="border-gray-600 text-white">
                                     {files?.['input']?.['videos']?.map((file: string) => (
                                         <SelectItem key={file} value={file}>
                                             {file}
@@ -99,6 +101,22 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                         </FormItem>
                     )}
                 />
+
+                <FormField
+                    control={form.control}
+                    name="output_name"
+                    render={({field}) => (
+                        <FormItem>
+                            <FormLabel>Output Name</FormLabel>
+                            <Input
+                                {...field}
+                                className="text-white"
+                            />
+                            <FormMessage/>
+                        </FormItem>
+                    )}
+                />
+                
 
                 <section className="flex space-x-4">
                     <FormField
@@ -113,7 +131,7 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                                         step="0.1"
                                         {...field}
                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value))}
-                                        className="bg-secondary text-white"
+                                        className=" text-white"
                                     />
                                 </FormControl>
                                 <FormDescription>
@@ -135,7 +153,7 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                                         type="number"
                                         {...field}
                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value))}
-                                        className="bg-secondary text-white"
+                                        className="text-white"
                                     />
                                 </FormControl>
                                 <FormDescription>
@@ -156,11 +174,11 @@ export function PauseCutterForm({onClose}: PauseCutterFormProps) {
                             <FormLabel>Select the model size for Speech-To-Text</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue="medium">
                                 <FormControl>
-                                    <SelectTrigger className="bg-secondary  text-white">
+                                    <SelectTrigger className="  text-white">
                                         <SelectValue placeholder="Select a file"/>
                                     </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-secondary border-gray-600 text-white">
+                                <SelectContent className=" border-gray-600 text-white">
                                     <SelectItem value="small">Small (2 GB GPU memory)</SelectItem>
                                     <SelectItem value="medium">Medium (5 GB GPU memory)</SelectItem>
                                     <SelectItem value="large">Large (10 GB GPU memory)</SelectItem>

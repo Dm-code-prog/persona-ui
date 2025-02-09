@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config";
 import { queryClient } from "@/App";
-
+import { fetchWithAuth } from "@/auth";
 export type CreateTrackedYoutubeChannelRequest = {
     channel_url: string;
     tag: string;
@@ -15,7 +15,7 @@ export const useCreateTrackedYoutubeChannelMutation = () => {
 
             const url = `${AppConfig.backend_url}/api/analytics/youtube_channel_tracker/`;
 
-            const response = await fetch(url, {
+            const response = await fetchWithAuth(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -40,19 +40,18 @@ export function FilePreviewModal({project_id, file_path, onClose}: FilePreviewMo
                     animate={{scale: 1, opacity: 1}}
                     exit={{scale: 0.9, opacity: 0}}
                     transition={{type: "spring", damping: 15}}
-                    className="bg-secondary rounded-lg p-6 max-w-3xl w-full mx-4 relative"
+                    className="bg-background border-accent border rounded-lg max-w-5xl w-full mx-4 relative"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-2 right-2 text-gray-400 hover:text-white"
+                        className="absolute top-2 right-2 text-gray-400 hover:text-white z-10"
                         onClick={onClose}
                     >
                         <X className="h-6 w-6"/>
                     </Button>
-                    <h3 className="text-xl font-semibold mb-4">{file_path}</h3>
-                    <div className="aspect-video bg-background rounded-lg overflow-hidden mb-4">
+                    <div className="aspect-video bg-background rounded-lg overflow-hidden">
                         {file_path.includes("photos") ? (
                             <img
                                 src={url}
@@ -64,7 +63,8 @@ export function FilePreviewModal({project_id, file_path, onClose}: FilePreviewMo
                                    className="w-full h-full"/>
                         )}
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex justify-between items-center p-6">
+                        <h3 className="text-xl font-semibold mb-4">{file_path.split("/").pop()}</h3>
                         <Button
                             disabled={isPending}
                             className="bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 ease-in-out transform hover:scale-105"

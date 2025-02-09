@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config";
-
+import { fetchWithAuth } from "@/auth";
 export type GetProjectTasksResponseItem = {
     id: string;             // uuid
     tool_name: string;
@@ -18,7 +18,7 @@ export const useGetProjectTasksQuery = (project_id: string) => {
         queryKey: ["GetProjectTasks", project_id],
         queryFn: async (): Promise<GetProjectTasksResponse> => {
             const url = `${AppConfig.backend_url}/api/projects/${project_id}/tasks`;
-            const response = await fetch(url);
+            const response = await fetchWithAuth(url);
             if (!response.ok) {
                 throw new Error("Failed to fetch project tasks");
             }

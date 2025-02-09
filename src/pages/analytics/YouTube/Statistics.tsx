@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button"
-import { useYouTubeAnalytics } from "@/hooks/data/local/analytics/useYouTubeChannelAnalytics"
+import { useYouTubeChannelAnalytics } from "@/hooks/data/local/analytics/useYouTubeChannelAnalytics"
 import YouTubeAnalyticsChart from "./AnalyticsChart"
 import Loader from "@/components/app/Loader/Loader"
 import { ErrorUI } from "@/components/app/Error/Error"
+import { useInitiateYoutubeAuthMutation } from "@/hooks/data/local/analytics/useInitiateYoutubeAuthMutation"
 
 type StatisticsProps = {
     channels: { channel_id: string, channel_name: string }[]
@@ -10,34 +11,33 @@ type StatisticsProps = {
 }
 
 export const Statistics = ({ channels, dateRange }: StatisticsProps) => {
-
     const from = new Date()
     from.setDate(from.getDate() - dateRange)
     const to = new Date()
 
-    const r = useYouTubeAnalytics(channels[0].channel_id, from.toISOString().split("T")[0], to.toISOString().split("T")[0])
+    const { data, isLoading, error } = useYouTubeChannelAnalytics(channels[0].channel_id, from.toISOString().split("T")[0], to.toISOString().split("T")[0])
 
-    if (!r.isAuthorized) {
-        return (
-            <div className="flex flex-col gap-4">
-                <h3 className="text-lg font-bold">Please authorize to view analytics</h3>
-                <Button variant="outline" className="w-32" onClick={r.initiateOAuth}>Authorize</Button>
-            </div>
-        )
-    }
+    const authMutation = useInitiateYoutubeAuthMutation()
 
-    if (r.isLoadingAnalytics) {
+    if (isLoading) {
         return <Loader />
     }
 
-    if (r.analyticsError) {
-        return <ErrorUI error={r.analyticsError} />
+    if (error?.message?.includes("Unauthorized")) {
+        return (<section className="flex flex-col gap-4 p-4">
+            <h3 className="text-lg font-bold">Unauthorized</h3>
+            <Button className="w-32 bg-blue-500 text-white hover:bg-blue-600" onClick={() => authMutation.mutate({ channel_id: channels[0].channel_id })}>Authorize</Button>
+        </section>)
     }
-    
+
+    if (error) {
+        return <ErrorUI error={error} />
+    }
+
 
     return (
         <div>
-            <YouTubeAnalyticsChart title="Views" data={r.analyticsData || []} />
+            <YouTubeAnalyticsChart title="Views" data={data || []} />
         </div>
     )
 }

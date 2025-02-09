@@ -1,6 +1,7 @@
 // usePutSecretMutation.ts
 import { useMutation } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config.ts";
+import { fetchWithAuth } from "@/auth";
 
 export type PutSecretRequest = {
     key: string;
@@ -17,7 +18,7 @@ export const usePutSecretMutation = () => {
             url.searchParams.append("key", key);
             url.searchParams.append("value", value);
 
-            const response = await fetch(url.toString(), {
+            const response = await fetchWithAuth(url.toString(), {
                 method: "PUT",
             });
 

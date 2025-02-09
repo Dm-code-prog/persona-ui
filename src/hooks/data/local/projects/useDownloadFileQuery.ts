@@ -1,5 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {AppConfig} from "@/config/app-config";
+import { fetchWithAuth } from "@/auth";
 
 type UseDownloadFileQueryParams = {
     project_id: string;
@@ -17,7 +18,7 @@ export const useDownloadFileQuery = ({
             const url = `${AppConfig.backend_url}/api/projects/${project_id}/files/download?${qs.toString()}`;
 
             // fetch the binary response
-            const response = await fetch(url);
+            const response = await fetchWithAuth(url);
             if (!response.ok) {
                 throw new Error("Failed to download file");
             }

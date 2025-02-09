@@ -1,18 +1,10 @@
-import { useState, useEffect } from "react"
-import { ChevronDown } from "lucide-react"
+import { useState,      } from "react"
 import Loader from "@/components/app/Loader/Loader"
 import { ChannelSelector } from "./ChannelSelector"
 import { TagSelector } from "./TagSelector"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { useYouTubeAnalytics } from "@/hooks/data/local/analytics/useYouTubeChannelAnalytics"
 import { useGetTrackedYoutubeChannelsQuery } from "@/hooks/data/local/analytics/useGetTrackedYoutubeChannelsQuery"
 import { ErrorUI } from "@/components/app/Error/Error"
-import { useCreateTrackedYoutubeChannelMutation } from "@/hooks/data/local/analytics/useCreateTrackedYoutubeChannelMutation"
-import { useToast } from "@/hooks/use-toast"
 import { AddChannelDialog } from "./AddChannelDialog"
-import { DropdownMenu, DropdownMenuItem, DropdownMenuContent } from "@/components/ui/dropdown-menu"
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Statistics } from "./Statistics"
 import { DateRangeSelector } from "./DateRangeSelector"
 
@@ -25,7 +17,9 @@ export default function YouTubeTracker() {
     const { data: channels, isLoading: channelsLoading, error: channelsError } = useGetTrackedYoutubeChannelsQuery()
 
     if (channelsLoading) {
-        return <Loader />
+        return <div className="flex justify-center items-center w-full h-screen">
+            <Loader />
+        </div>
     }
 
     if (channelsError) {

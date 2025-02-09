@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config";
 import { queryClient } from "@/App";
-
+import { fetchWithAuth } from "@/auth";
 export type DeleteProjectFileRequest = {
     file_path: string;
 };
@@ -15,7 +15,7 @@ export const useDeleteProjectFileMutation = (project_id: string) => {
             const qs = new URLSearchParams({ file_path });
             const url = `${AppConfig.backend_url}/api/projects/${project_id}/files/delete?${qs.toString()}`;
 
-            const response = await fetch(url, {
+            const response = await fetchWithAuth(url, {
                 method: "DELETE",
             });
             if (!response.ok) {

@@ -1,7 +1,7 @@
 import {useMutation} from "@tanstack/react-query";
 import {AppConfig} from "@/config/app-config";
 import {queryClient} from "@/App.tsx";
-
+import { fetchWithAuth } from "@/auth";
 // According to spec: multipart/form-data with { file, file_type } required
 export type UploadProjectFileRequest = {
     file: File;      // or Blob
@@ -21,7 +21,7 @@ export const useUploadProjectFileMutation = (project_id: string) => {
             formData.append("file", file);
             formData.append("file_type", file_type);
 
-            const response = await fetch(url, {
+            const response = await fetchWithAuth(url, {
                 method: "POST",
                 body: formData,
             });

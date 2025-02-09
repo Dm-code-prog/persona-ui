@@ -17,7 +17,7 @@ export function AppSidebar() {
     return (
         <aside className="fixed w-64 h-screen border-r">
             <div className="h-[64px] flex items-center px-6">
-                <span className="text-xl font-semibold">
+                <span className="text-xl font-semibold mt-4">
                     <NavLink to={'/'} className="font-bold text-xl">Fabrika AI Studio</NavLink>
                 </span>
             </div>

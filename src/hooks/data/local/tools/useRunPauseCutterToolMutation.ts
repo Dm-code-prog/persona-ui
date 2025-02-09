@@ -8,6 +8,7 @@ export type RunPauseCutterToolRequest = {
     pause_padding?: number;   // default 0.1
     whisper_model?: string;   // default "small"
     video_name: string;
+    output_name: string;
 };
 
 export type RunPauseCutterToolResponse = Record<string, unknown>;

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config";
-
+import { fetchWithAuth } from "@/auth";
 export type GetTrackedYoutubeChannelItem = {
     channel_id: string;
     channel_name: string;
@@ -17,7 +17,7 @@ export const useGetTrackedYoutubeChannelsQuery = () => {
         queryKey: ["GetTrackedYoutubeChannels"],
         queryFn: async (): Promise<GetTrackedYoutubeChannelsResponse> => {
             const url = `${AppConfig.backend_url}/api/analytics/youtube_channel_tracker/list`;
-            const response = await fetch(url);
+            const response = await fetchWithAuth(url);
             if (!response.ok) {
                 throw new Error("Failed to fetch tracked YouTube channels");
             }

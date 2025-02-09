@@ -23,7 +23,7 @@ export function ErrorUI({error, reset}: ErrorComponentProps) {
                     <CardHeader className="border-b border-red-100">
                         <CardTitle className="text-red-700 flex items-center gap-2">
                             <AlertCircle className="h-6 w-6"/>
-                            Oops! Something went wrong
+                            Oops! Something went wrong {error.message}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6">

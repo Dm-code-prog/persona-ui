@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config";
+import { fetchWithAuth } from "@/auth";
 
 export type CreateNewProjectRequest = {
     name: string;
@@ -15,7 +16,7 @@ export type CreateNewProjectResponse = {
 export const useCreateNewProjectMutation = () => {
     return useMutation<CreateNewProjectResponse, Error, CreateNewProjectRequest>({
         mutationFn: async (payload: CreateNewProjectRequest) => {
-            const response = await fetch(`${AppConfig.backend_url}/api/projects/`, {
+            const response = await fetchWithAuth(`${AppConfig.backend_url}/api/projects/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

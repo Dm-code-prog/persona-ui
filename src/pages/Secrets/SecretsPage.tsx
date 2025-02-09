@@ -11,11 +11,12 @@ import { queryClient } from "@/App.tsx";
 import { useToast } from "@/hooks/use-toast.ts";
 import { useGetSecretInsecureQuery } from "@/hooks/data/local/secrets/useGetSecretInsecureQuery"
 import Loader from "@/components/app/Loader/Loader"
+import { fetchWithAuth } from "@/auth"
 
 export default function SecretsPage() {
-    const [elevenlabsKey, setElevenlabsKey] = useState("")
-    const [openaiKey, setOpenaiKey] = useState("")
-    const [youtubeDataApiKey, setYoutubeDataApiKey] = useState("")
+    const [elevenlabsKey, setElevenlabsKey] = useState<string>("")
+    const [openaiKey, setOpenaiKey] = useState<string>("")
+    const [youtubeDataApiKey, setYoutubeDataApiKey] = useState<string>("")
     const [error, setError] = useState("")
 
     const { toast } = useToast()
@@ -26,19 +27,30 @@ export default function SecretsPage() {
 
     const mutation = useMutation({
         mutationFn: async () => {
-            const setElevenLabsKey = fetch(
+            const setElevenLabsKey = fetchWithAuth(
                 `${AppConfig.backend_url}/api/secrets/put?key=elevenlabs_api_key&value=${elevenlabsKey}`, {
                 method: 'PUT',
             })
-            const setOpenAIKey = fetch(
+            const setOpenAIKey = fetchWithAuth(
                 `${AppConfig.backend_url}/api/secrets/put?key=openai_api_key&value=${openaiKey}`, {
                 method: 'PUT',
             })
-            const setYoutubeDataApiKey = fetch(
+            const setYoutubeDataApiKey = fetchWithAuth(
                 `${AppConfig.backend_url}/api/secrets/put?key=youtube_data_api_key&value=${youtubeDataApiKey}`, {
                 method: 'PUT',
             })
-            const res = await Promise.all([setElevenLabsKey, setOpenAIKey, setYoutubeDataApiKey])
+
+            const requests = [] as Promise<Response>[]
+            if (elevenlabsKey) {
+                requests.push(setElevenLabsKey)
+            }
+            if (openaiKey) {
+                requests.push(setOpenAIKey)
+            }
+            if (youtubeDataApiKey) {
+                requests.push(setYoutubeDataApiKey)
+            }
+            const res = await Promise.all(requests)
             if (res.some(r => !r.ok)) {
                 throw new Error("Failed to save API keys, server responded with status code " + res.map(r => r.status).join(", "))
             }

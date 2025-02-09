@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query"
 import { AppConfig } from "@/config/app-config"
 import { queryClient } from "@/App"
-
+import { fetchWithAuth } from "@/auth"
 export type RunUnifierToolRequest = {
     video_name: string
     effect_name: string
@@ -16,7 +16,7 @@ export const useRunUnifierToolMutation = (project_id: string) => {
     return useMutation<RunUnifierToolResponse, Error, RunUnifierToolRequest>({
         mutationFn: async ({...body}) => {
             const url = `${AppConfig.backend_url}/api/tools/video_unifier/${project_id}/run`;
-            const response = await fetch(url, {
+            const response = await fetchWithAuth(url, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

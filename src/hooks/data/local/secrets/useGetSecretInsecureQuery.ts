@@ -1,7 +1,7 @@
 // useGetSecretInsecureQuery.ts
 import { useQuery } from "@tanstack/react-query";
 import { AppConfig } from "@/config/app-config.ts";
-
+import { fetchWithAuth } from "@/auth";
 
 export type GetSecretInsecureResponse = {
     key: string;
@@ -15,7 +15,7 @@ export const useGetSecretInsecureQuery = (keyParam: string) => {
             const url = new URL(`${AppConfig.backend_url}/api/secrets/get-insecure`);
             url.searchParams.append("key", keyParam);
 
-            const response = await fetch(url.toString());
+            const response = await fetchWithAuth(url.toString());
             if (!response.ok) {
                 throw new Error(`Failed to get secret insecurely with key: ${keyParam}`);
             }
