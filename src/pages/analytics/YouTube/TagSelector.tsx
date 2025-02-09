@@ -7,18 +7,18 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 interface TagSelectorProps {
     tags: string[]
+    selectedTag: string | null
     onSelect: (tag: string) => void
 }
 
-export function TagSelector({ tags, onSelect }: TagSelectorProps) {
+export function TagSelector({ tags, selectedTag, onSelect }: TagSelectorProps) {
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState("")
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
-                    {value || "Select tag..."}
+                    {selectedTag || "Select tag..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -32,12 +32,11 @@ export function TagSelector({ tags, onSelect }: TagSelectorProps) {
                                 <CommandItem
                                     key={tag}
                                     onSelect={() => {
-                                        setValue(tag)
                                         setOpen(false)
                                         onSelect(tag)
                                     }}
                                 >
-                                    <Check className={cn("mr-2 h-4 w-4", value === tag ? "opacity-100" : "opacity-0")} />
+                                    <Check className={cn("mr-2 h-4 w-4", selectedTag === tag ? "opacity-100" : "opacity-0")} />
                                     {tag}
                                 </CommandItem>
                             ))}

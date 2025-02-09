@@ -12,16 +12,15 @@ interface Channel {
 
 interface ChannelSelectorProps {
     channels: Channel[]
+    selectedChannel: string | null
     onSelect: (channelId: string) => void
 }
 
-export function ChannelSelector({ channels, onSelect }: ChannelSelectorProps) {
+export function ChannelSelector({ channels, selectedChannel, onSelect }: ChannelSelectorProps) {
     const [open, setOpen] = useState(false)
-    const [value, setValue] = useState("")
 
     useEffect(() => {
         if (channels && channels.length > 0) {
-            setValue(channels[0].channel_id)
             onSelect(channels[0].channel_id)
         }
     }, [channels])
@@ -30,7 +29,7 @@ export function ChannelSelector({ channels, onSelect }: ChannelSelectorProps) {
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between">
-                    {value ? channels.find((channel) => channel.channel_id === value)?.channel_name : "Select channel..."}
+                    {selectedChannel ? channels.find((channel) => channel.channel_id === selectedChannel)?.channel_name : "Select channel..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
@@ -44,12 +43,11 @@ export function ChannelSelector({ channels, onSelect }: ChannelSelectorProps) {
                                 <CommandItem
                                     key={channel.channel_id}
                                     onSelect={() => {
-                                        setValue(channel.channel_id)
                                         setOpen(false)
                                         onSelect(channel.channel_id)
                                     }}
                                 >
-                                    <Check className={cn("mr-2 h-4 w-4", value === channel.channel_id ? "opacity-100" : "opacity-0")} />
+                                    <Check className={cn("mr-2 h-4 w-4", selectedChannel === channel.channel_id ? "opacity-100" : "opacity-0")} />
                                     {channel.channel_name}
                                 </CommandItem>
                             ))}

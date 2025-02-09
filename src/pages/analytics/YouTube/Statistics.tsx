@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { useYouTubeChannelAnalytics } from "@/hooks/data/local/analytics/useYouTubeChannelAnalytics"
+import { useAggregateAnalytics } from "@/hooks/data/local/analytics/useYouTubeChannelAnalytics"
 import YouTubeAnalyticsChart from "./AnalyticsChart"
 import Loader from "@/components/app/Loader/Loader"
 import { ErrorUI } from "@/components/app/Error/Error"
@@ -11,11 +11,7 @@ type StatisticsProps = {
 }
 
 export const Statistics = ({ channels, dateRange }: StatisticsProps) => {
-    const from = new Date()
-    from.setDate(from.getDate() - dateRange)
-    const to = new Date()
-
-    const { data, isLoading, error } = useYouTubeChannelAnalytics(channels[0].channel_id, from.toISOString().split("T")[0], to.toISOString().split("T")[0])
+    const { data, isLoading, error } = useAggregateAnalytics({ channels, dateRange })
 
     const authMutation = useInitiateYoutubeAuthMutation()
 
@@ -24,9 +20,10 @@ export const Statistics = ({ channels, dateRange }: StatisticsProps) => {
     }
 
     if (error?.message?.includes("Unauthorized")) {
+        const channelID = error.message.split("=")[1]
         return (<section className="flex flex-col gap-4 p-4">
             <h3 className="text-lg font-bold">Unauthorized</h3>
-            <Button className="w-32 bg-blue-500 text-white hover:bg-blue-600" onClick={() => authMutation.mutate({ channel_id: channels[0].channel_id })}>Authorize</Button>
+            <Button className="w-32 bg-blue-500 text-white hover:bg-blue-600" onClick={() => authMutation.mutate({ channel_id: channelID })}>Authorize</Button>
         </section>)
     }
 
